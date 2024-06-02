@@ -1,17 +1,23 @@
-import React, { useContext, useState } from 'react'
+import React, { Profiler, useContext, useState } from 'react'
 import './Navbar.css'
 import { assets } from "../../assets/assets"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 
 const Navbar = ({ setShowLogin }) => {
+  const navigate = useNavigate()
 
   const [menu, setMenu] = useState("home");
-  const {getTotalCartAmount} = useContext(StoreContext)
+  const { getTotalCartAmount, token, setToken } = useContext(StoreContext)
+  const logout = () => {
+    setToken("")
+    localStorage.removeItem("token")
+    navigate("/")
+  }
 
   return (
     <div className='navbar'>
-       <Link to="/" ><img src={assets.logo} className='logo'></img></Link>
+      <Link to="/" ><img src={assets.logo} className='logo'></img></Link>
       <ul className='navbar-menu'>
         <Link to="/" onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>Home</Link>
         <a href='#explore-menu' onClick={() => setMenu("menu")} className={menu === "menu" ? "active" : ""}>Menu</a>
@@ -23,11 +29,21 @@ const Navbar = ({ setShowLogin }) => {
         <div className="navbar-search-icon">
           <Link to="/cart">
             <img src={assets.basket_icon} alt="" /></Link>
-          <div className={getTotalCartAmount()===0?"":"dot"}></div>
+          <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
         </div>
-        <button onClick={() => {
+        {!token ? <button onClick={() => {
           setShowLogin(true)
         }}>Sign In</button>
+          : <div className='navbar-profile'> <img src={assets.profile_icon} alt="" />
+            <ul className="nav-profile-dropdown">
+              <li>
+                <img src={assets.bag_icon} alt="" /><p>orders</p>              </li>
+              <hr />
+              <li onClick={logout}>
+                <img src={assets.logout_icon} alt="" /><p>logout</p>
+              </li>
+            </ul>
+          </div>}
       </div>
     </div>
   )
