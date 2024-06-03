@@ -4,6 +4,8 @@ import { assets } from "../../assets/assets"
 import { Link, useNavigate } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 
+import { NavLink } from 'react-router-dom'
+
 const Navbar = ({ setShowLogin }) => {
   const navigate = useNavigate()
 
@@ -35,9 +37,10 @@ const Navbar = ({ setShowLogin }) => {
           setShowLogin(true)
         }}>Sign In</button>
           : <div className='navbar-profile'> <img src={assets.profile_icon} alt="" />
-            <ul className="nav-profile-dropdown">
+            <ul className="nav-profile-dropdown"> <Link to="/my-orders">
               <li>
-                <img src={assets.bag_icon} alt="" /><p>orders</p>              </li>
+               <img src={assets.bag_icon} alt="" /><p>orders</p>               </li></Link> 
+              
               <hr />
               <li onClick={logout}>
                 <img src={assets.logout_icon} alt="" /><p>logout</p>
